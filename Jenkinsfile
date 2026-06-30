@@ -12,8 +12,8 @@ pipeline {
       steps {
         echo 'Starting application in CI environment...'
 
-        // Up the system from scratch
-        sh 'docker compose up -d --build'
+        // Up the system from scratch (only web and db services, not jenkins)
+        sh 'docker compose up -d --build web db'
 
         // Let's wait 5 seconds for the db and the app to be fully ready.
         sh 'sleep 5'
