@@ -29,6 +29,7 @@ services:
       - jenkins_home:/var/jenkins_home # To prevent Jenkins data loss
       - /var/run/docker.sock:/var/run/docker.sock # Sharing our computer's Docker engine
       - /usr/bin/docker:/usr/bin/docker # Sharing the docker command from our computer
+      - /usr/libexec/docker/cli-plugins:/usr/libexec/docker/cli-plugins # Sharing docker plugins with Jenkins
 
 volumes:
   jenkins_home: # Defining a permanent data storage area
