@@ -22,11 +22,17 @@ pipeline {
 
     stage('Run Tests') {
       steps {
-        echo 'Running integration tests...'
+        echo 'Running integration tests via ephemeral container...'
 
         // Execute the curl command into the app and check the result.
         // If it returns status: success, the test will be considered successful.
-        sh 'curl -s http://localhost:8000/ | grep "success"'
+        // --rm: Removes container after the job done.
+        // --network: Connects to the network where the application is located.
+        sh '''
+        docker run --rm \
+          --network fastapi-ci-pipeline_default \
+          curlimages/curl:8.2.1 -s http://web:8000/ | grep "success"
+        '''
       }
     }
   }
