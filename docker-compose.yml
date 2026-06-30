@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    depends_on:
+      - db
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: root # To run docker commands
+    ports:
+      - "8080:8080" # Jenkins UI
+      - "50000:50000" # Agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home # To prevent Jenkins data loss
+      - /var/run/docker.sock:/var/run/docker.sock # Sharing our computer's Docker engine
+      - /usr/bin/docker:/usr/bin/docker # Sharing the docker command from our computer
+
+volumes:
+  jenkins_home: # Defining a permanent data storage area
