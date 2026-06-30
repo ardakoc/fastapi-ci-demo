@@ -1,6 +1,12 @@
 pipeline {
   agent any
 
+  environment {
+    DB_USER='arda'
+    DB_NAME='devops_demo_01'
+    DB_PASSWORD=credentials('db-password-id')
+  }
+
   stages {
     stage('Environment Setup') {
       steps {
